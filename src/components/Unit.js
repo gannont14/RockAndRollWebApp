@@ -9,7 +9,7 @@ const Unit = ({ unitNumber }) => {
 
   const [currentIndex, setCurrentIndex] = useState(null);
 
-  const filePath = `/unit${unitNumber}.json`;
+  const filePath = `${process.env.PUBLIC_URL}/unit${unitNumber}.json`;
 
   console.log("File path");
   console.log(filePath);
