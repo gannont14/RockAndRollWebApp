@@ -1,25 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
-
+import "./App.css";
+import MusicFrame from "./components/MusicFrame";
+import TestComponent from "./components/TestComponent";
+import Unit from "./components/Unit";
+import UnitSelector from "./components/UnitSelector";
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* <Unit unitNumber={"1"} /> */}
+      <UnitSelector />
     </div>
   );
 }
 
 export default App;
+
+// https://drive.google.com/file/d/1V2xSXpGSm5Vb4hBo8D3bHVPLfZuAv4VT/view?usp=drive_link
