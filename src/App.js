@@ -5,7 +5,7 @@ import Unit from "./components/Unit";
 import UnitSelector from "./components/UnitSelector";
 function App() {
   return (
-    <div className="App">
+    <div className="App light">
       {/* <Unit unitNumber={"1"} /> */}
       <UnitSelector />
     </div>

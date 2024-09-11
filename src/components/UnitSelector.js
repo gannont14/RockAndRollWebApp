@@ -21,7 +21,7 @@ const UnitSelector = () => {
       )}
       {unitSelected !== null && (
         <div>
-          <h1 className="font-bold text-7xl pt-[10%]">
+          <h1 className="font-bold text-5xl pt-[15%]">
             {" "}
             Z201 Unit: {unitSelected}
           </h1>

@@ -9,7 +9,9 @@ const Unit = ({ unitNumber }) => {
 
   const [currentIndex, setCurrentIndex] = useState(null);
 
-  const filePath = `${process.env.PUBLIC_URL}/unit${unitNumber}.json`;
+  const baseURL = process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}` : "";
+
+  const filePath = `${baseURL}/unit${unitNumber}.json`;
 
   console.log("File path");
   console.log(filePath);
@@ -49,15 +51,28 @@ const Unit = ({ unitNumber }) => {
   return (
     <div className="flex flex-col align-middle w-full h-[100vh] mt-10">
       <div className="p-5 shadow-2xl rounded-lg mx-auto">
-        <button
-          onClick={() => setShowSongList(!showSongList)}
-          className="absolute top-3 right-3 p-2 bg-gray-200 rounded-full"
+        <div
+          className="tooltip tooltip-left absolute top-3 right-3 p-2"
+          data-tip="shows the full list of songs from the unit, select one you want to hear"
         >
-          {showSongList ? "Hide Song List" : "Show Song List"}
-        </button>
+          <button
+            onClick={() => setShowSongList(!showSongList)}
+            className="btn hover:underline"
+          >
+            {showSongList ? "Hide Song List" : "Show Song List"}
+          </button>
+        </div>
+
+        <div
+          className="tooltip tooltip-left absolute top-20 right-3 p-2"
+          data-tip="Selecting 'next song' will choose a new random song from the unit selected, you can show and hide the artist and song title as you please to test yourself, there is also a full song list you are able to view, if the site is not working, give it a second to load, if it still isn't working, I probably broke something"
+        >
+          <button className="btn">?</button>
+        </div>
+
         {!showSongList ? (
           <>
-            <h1 className="text-3xl font-bold">Current Song</h1>
+            <h1 className="text-3xl font-bold">Now Playing:</h1>
             <MusicFrame
               index={currentIndex}
               ID={data[currentIndex].id}
