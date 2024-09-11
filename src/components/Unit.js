@@ -51,10 +51,7 @@ const Unit = ({ unitNumber }) => {
   return (
     <div className="flex flex-col align-middle w-full h-[100vh] mt-10">
       <div className="p-5 shadow-2xl rounded-lg mx-auto">
-        <div
-          className="tooltip tooltip-left absolute top-3 right-3 p-2"
-          data-tip="shows the full list of songs from the unit, select one you want to hear"
-        >
+        <div className="tooltip tooltip-left absolute bottom-3 right-3 p-2">
           <button
             onClick={() => setShowSongList(!showSongList)}
             className="btn hover:underline"
@@ -64,7 +61,7 @@ const Unit = ({ unitNumber }) => {
         </div>
 
         <div
-          className="tooltip tooltip-left absolute top-20 right-3 p-2"
+          className="tooltip tooltip-left absolute bottom-20 right-3 p-2"
           data-tip="Selecting 'next song' will choose a new random song from the unit selected, you can show and hide the artist and song title as you please to test yourself, there is also a full song list you are able to view, if the site is not working, give it a second to load, if it still isn't working, I probably broke something"
         >
           <button className="btn">?</button>

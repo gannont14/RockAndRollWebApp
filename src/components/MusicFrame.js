@@ -38,18 +38,18 @@ const MusicFrame = ({ index, title, artist, ID }) => {
           frameborder="0"
           width="420"
           height="120"
-          src={`https://drive.google.com/file/d/${ID}/preview`}
+          src={`https://drive.google.com/file/d/${ID}/preview?usp=embed&toolbar=0`}
           className="pt-5 bg-white"
         ></iframe>
       </div>
       <button
-        className="m-5 p-5 border border-black rounded-lg"
+        className="m-3 p-3 border border-black rounded-lg"
         onClick={toggleTitleShowing}
       >
         Show Title
       </button>
       <button
-        className="m-5 p-5 border border-black rounded-lg"
+        className="m-3 p-3 border border-black rounded-lg"
         onClick={toggleArtistShowing}
       >
         Show Artist
