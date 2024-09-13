@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Unit from "./Unit";
 
-const UnitSelector = () => {
+const StudyUnitSelector = ({ studyType }) => {
   const [unitSelected, setUnitSelected] = useState(null);
 
   return (
@@ -25,11 +25,11 @@ const UnitSelector = () => {
             {" "}
             Z201 Unit: {unitSelected}
           </h1>
-          <Unit unitNumber={unitSelected} />
+          <Unit unitNumber={unitSelected} studyType={studyType} />
         </div>
       )}
     </div>
   );
 };
 
-export default UnitSelector;
+export default StudyUnitSelector;

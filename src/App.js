@@ -1,13 +1,14 @@
 import "./App.css";
 import MusicFrame from "./components/MusicFrame";
+import StudyUnitSelector from "./components/StudyUnitSelector";
 import TestComponent from "./components/TestComponent";
+import TypeSelector from "./components/TypeSelector";
 import Unit from "./components/Unit";
-import UnitSelector from "./components/UnitSelector";
 function App() {
   return (
     <div className="App light">
       {/* <Unit unitNumber={"1"} /> */}
-      <UnitSelector />
+      <TypeSelector />
     </div>
   );
 }

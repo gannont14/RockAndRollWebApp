@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import MusicFrame from "./MusicFrame";
 
-const Unit = ({ unitNumber }) => {
+const Unit = ({ unitNumber, studyType }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -75,6 +75,8 @@ const Unit = ({ unitNumber }) => {
               ID={data[currentIndex].id}
               title={data[currentIndex].name}
               artist={data[currentIndex].author}
+              studyType={studyType}
+              unitNumber={unitNumber}
             />
             <button
               onClick={() => setRandomIndex(data)}
