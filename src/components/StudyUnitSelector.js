@@ -11,9 +11,15 @@ const StudyUnitSelector = ({ studyType }) => {
           <h1>Select your unit</h1>
           <button
             onClick={() => setUnitSelected("1")}
-            className="m-[25%] p-5 rounded-xl border border-black"
+            className="mx-[25%] my-5 p-5 rounded-xl border border-black"
           >
             Unit 1
+          </button>
+          <button
+            className="mx-[25%] my-5 p-5 rounded-xl border border-black"
+            onClick={() => setUnitSelected("2")}
+          >
+            Unit 2
           </button>
           {/* <button onClick={() => setUnitSelected("2")}>Unit 2</button>
           <button onClick={() => setUnitSelected("3")}>Unit 3</button> */}

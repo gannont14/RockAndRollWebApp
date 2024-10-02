@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from "react";
 import QuizButtons from "./QuizButtons";
 
-const MusicFrame = ({ index, title, artist, ID, studyType, unitNumber }) => {
+const MusicFrame = ({
+  index,
+  title,
+  artist,
+  genre,
+  ID,
+  studyType,
+  unitNumber,
+}) => {
   const [titleShowing, setTitleShowing] = useState(false);
   const [artistShowing, setArtistShowing] = useState(false);
+  const [genreShowing, setGenreShowing] = useState(false);
   const [frameContent, setFrameContent] = useState(null);
 
   useEffect(() => {
     setTitleShowing(false);
     setArtistShowing(false);
+    setGenreShowing(false);
   }, [title, artist]);
 
   useEffect(() => {
@@ -27,6 +37,12 @@ const MusicFrame = ({ index, title, artist, ID, studyType, unitNumber }) => {
               onClick={toggleArtistShowing}
             >
               Show Artist
+            </button>
+            <button
+              className="m-3 p-3 border border-black rounded-lg"
+              onClick={toggleGenreShowing}
+            >
+              Show Genre
             </button>
           </div>
         );
@@ -53,6 +69,14 @@ const MusicFrame = ({ index, title, artist, ID, studyType, unitNumber }) => {
     }
   };
 
+  const toggleGenreShowing = () => {
+    if (artistShowing) {
+      setGenreShowing(false);
+    } else {
+      setGenreShowing(true);
+    }
+  };
+
   return (
     <div className="m-5 p-5 mx-auto">
       <h1 className={titleShowing ? `text-black` : `hidden`}>
@@ -61,6 +85,9 @@ const MusicFrame = ({ index, title, artist, ID, studyType, unitNumber }) => {
       <h2 className={artistShowing ? `text-black` : `hidden`}>
         <span className="font-bold">Artist:</span> {artist}
       </h2>
+      <h3 className={genreShowing ? `text-black` : `hidden`}>
+        <span className="font-bold">Genre:</span> {genre != null ? genre : ""}
+      </h3>
       <div className="flex justify-center">
         <iframe
           frameborder="0"

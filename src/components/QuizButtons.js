@@ -20,14 +20,17 @@ const QuizButtons = ({ index, unitNumber }) => {
         const song = data[index]; // Get the current song based on the index
         setCorrectArtist(song.author); // Set the correct artist
 
-        const allArtists = data.map((song) => song.author); // Get all artists from the unit
-        setArtists(allArtists);
+        const allArtists = data
+          .map((song) => song.author)
+          .filter((artist) => artist !== song.author); // Exclude the correct artist
 
-        // Get 3 random incorrect artists
-        const incorrectArtists = allArtists
-          .filter((artist) => artist !== song.author) // Exclude the correct artist
-          .sort(() => 0.5 - Math.random()) // Shuffle the incorrect artists
-          .slice(0, 3); // Select the first 3 artists from the shuffled array
+        // Use a Set to avoid duplicate incorrect artists
+        const uniqueIncorrectArtists = Array.from(new Set(allArtists));
+
+        // Shuffle and select 3 incorrect artists
+        const incorrectArtists = uniqueIncorrectArtists
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 3);
 
         // Combine correct and incorrect artists and shuffle them
         const quizOptions = [...incorrectArtists, song.author].sort(

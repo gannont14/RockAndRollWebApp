@@ -75,6 +75,7 @@ const Unit = ({ unitNumber, studyType }) => {
               ID={data[currentIndex].id}
               title={data[currentIndex].name}
               artist={data[currentIndex].author}
+              genre={data[currentIndex].genre}
               studyType={studyType}
               unitNumber={unitNumber}
             />
