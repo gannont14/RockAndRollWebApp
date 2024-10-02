@@ -1,0 +1,35 @@
+name: Deploy to GitHub Pages # Workflow name
+
+on: # Triggers the workflow
+  push:
+    branches:
+      - main # Run on push to 'main' branch
+  pull_request:
+    branches:
+      - main # Run on pull request to 'main' branch
+
+jobs: # Defines the jobs
+  build:
+    runs-on: ubuntu-latest # Specify the runner environment
+
+    steps:
+      - name: Checkout repository # Step name
+        uses: actions/checkout@v3 # GitHub Action to checkout the repository
+
+      - name: Set up Node.js # Step to set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14" # Use the correct Node.js version for your project
+
+      - name: Install dependencies # Step to install dependencies
+        run: npm install # Runs npm install to install dependencies
+
+      - name: Build the project # Step to build the project
+        run: npm run build # Replace with your build command if different
+
+      - name: Deploy to GitHub Pages # Step to deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Uses the GitHub Actions token for authentication
+          publish_dir: ./build # Directory where the built files are located, e.g., 'build' for React apps
+
