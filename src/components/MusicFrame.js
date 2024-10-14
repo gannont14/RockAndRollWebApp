@@ -44,7 +44,7 @@ const MusicFrame = ({
             >
               Show Genre
             </button>
-          </div>
+          </div>,
         );
         break;
       case "quiz":

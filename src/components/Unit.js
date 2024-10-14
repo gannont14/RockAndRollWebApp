@@ -1,8 +1,9 @@
 import { React, useEffect, useState } from "react";
 import MusicFrame from "./MusicFrame";
 
-const Unit = ({ unitNumber, studyType }) => {
+const Unit = ({ unitNumber, studyType, queueType = "smart" }) => {
   const [data, setData] = useState([]);
+  const [queue, setQueue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showSongList, setShowSongList] = useState(false);
@@ -13,8 +14,22 @@ const Unit = ({ unitNumber, studyType }) => {
 
   const filePath = `${baseURL}/unit${unitNumber}.json`;
 
-  console.log("File path");
-  console.log(filePath);
+  const shuffleArray = (arr) => {
+    let shuffled = [...arr];
+
+    //loop through the elements, swapping each of them with a random index
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      //swap elements
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  //useEffect for whenever data changes, to shuffle the array
+  useEffect(() => {
+    setQueue(shuffleArray([...Array(data.length).keys()]));
+  }, [data]);
 
   useEffect(() => {
     // Fetch the JSON file from the public directory
@@ -38,7 +53,24 @@ const Unit = ({ unitNumber, studyType }) => {
   }, []);
 
   const setRandomIndex = (data) => {
-    setCurrentIndex(Math.floor(Math.random() * data.length));
+    if (queueType === "smart") {
+      setQueue((prevQueue) => {
+        let newQueue = [...prevQueue];
+
+        if (newQueue.length === 0) {
+          // If queue is empty, reshuffle and refill the queue with indices
+          newQueue = shuffleArray([...Array(data.length).keys()]);
+        }
+
+        const nextIndex = newQueue.pop(); // Get the last element in the queue (random index)
+        setCurrentIndex(nextIndex); // Update the current index based on the next available one
+
+        return newQueue; // Return the updated queue of indices
+      });
+    } else {
+      // If not using "smart" queue, just pick a random index
+      setCurrentIndex(Math.floor(Math.random() * data.length));
+    }
   };
   const handleSongSelect = (index) => {
     setCurrentIndex(index);
