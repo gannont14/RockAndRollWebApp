@@ -34,7 +34,7 @@ const QuizButtons = ({ index, unitNumber }) => {
 
         // Combine correct and incorrect artists and shuffle them
         const quizOptions = [...incorrectArtists, song.author].sort(
-          () => 0.5 - Math.random()
+          () => 0.5 - Math.random(),
         );
         setOptions(quizOptions);
       } catch (error) {
@@ -57,14 +57,14 @@ const QuizButtons = ({ index, unitNumber }) => {
           <button
             key={idx}
             onClick={() => handleClick(artist)}
-            className={`btn btn-outline my-3 
+            className={`btn my-3 
               ${
                 selectedArtist
                   ? artist === correctArtist
-                    ? "bg-green-500" // Correct answer: green
+                    ? "bg-green-500 hover:bg-green-500" // Correct answer: green
                     : selectedArtist === artist
-                    ? "bg-red-500" // Incorrect answer: red
-                    : ""
+                      ? "bg-red-500 hover:bg-red-500" // Incorrect answer: red
+                      : ""
                   : ""
               }
             `}
