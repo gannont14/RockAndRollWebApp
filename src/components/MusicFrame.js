@@ -9,6 +9,7 @@ const MusicFrame = ({
   ID,
   studyType,
   unitNumber,
+  classSelected,
 }) => {
   const [titleShowing, setTitleShowing] = useState(false);
   const [artistShowing, setArtistShowing] = useState(false);
@@ -19,7 +20,7 @@ const MusicFrame = ({
     setTitleShowing(false);
     setArtistShowing(false);
     setGenreShowing(false);
-  }, [title, artist]);
+  }, []);
 
   useEffect(() => {
     switch (studyType) {
@@ -48,10 +49,16 @@ const MusicFrame = ({
         );
         break;
       case "quiz":
-        setFrameContent(<QuizButtons index={index} unitNumber={unitNumber} />);
+        setFrameContent(
+          <QuizButtons
+            index={index}
+            unitNumber={unitNumber}
+            classSelected={classSelected}
+          />,
+        );
         break;
     }
-  });
+  }, []);
 
   const toggleTitleShowing = () => {
     if (titleShowing) {

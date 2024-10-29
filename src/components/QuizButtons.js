@@ -1,13 +1,13 @@
 import { React, useEffect, useState } from "react";
 
-const QuizButtons = ({ index, unitNumber }) => {
+const QuizButtons = ({ index, unitNumber, classSelected }) => {
   const [artists, setArtists] = useState([]);
   const [options, setOptions] = useState([]);
   const [correctArtist, setCorrectArtist] = useState("");
   const [selectedArtist, setSelectedArtist] = useState(null); // Track the selected artist
 
   const baseURL = process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}` : "";
-  const filePath = `${baseURL}/unit${unitNumber}.json`;
+  const filePath = `${baseURL}/classes/${classSelected}/unit${unitNumber}.json`;
 
   useEffect(() => {
     setSelectedArtist(null);

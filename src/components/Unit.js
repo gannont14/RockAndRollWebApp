@@ -115,6 +115,7 @@ const Unit = ({
               genre={data[currentIndex].genre}
               studyType={studyType}
               unitNumber={unitNumber}
+              classSelected={classSelected}
             />
             <button
               onClick={() => setRandomIndex(data)}
