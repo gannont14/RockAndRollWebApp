@@ -76,6 +76,8 @@ def upload_class():
 
         print(f"uploading class with \nclass_name:{class_name}\nnumber_of_units: {number_of_units}\nlinks: {links}")
 
+        
+
         #pass the classname, number of units, links, and file into function call
 
         # check first if the links are the actual IDs or the share link 
@@ -160,23 +162,42 @@ def upload_file(folder_id, unit_number, file, className):
     # Extract the songs metadata, and then check to match with fuzzy matching
     try:
         # might change ..................
+        print(f'before document extraction')
         doc = docx.Document(file)
+        print(f'after document extraction')
 
         extracted_songs = extract_songs_by_units(doc)
+        print(f'songs extraced successfully')
         
         unit_header = f"UNIT {unit_number}"
         if unit_header not in extracted_songs:
             return jsonify({'error': f'Unit {unit_number} not found in the document provided'})
 
         unit_songs = extracted_songs[unit_header]
+        print(f'unit_songs: {unit_songs}')
 
+        print(f'before parse_songs_from_unit')
         parsed_songs = parse_songs_from_unit(unit_songs)
+        print(f'after parse_songs_from_unit: parsed songs: {parsed_songs}')
 
+        print(f'before update_json_with_songs_fuzzy')
         updated_json = update_json_with_songs_fuzzy(driveFolderResponse, parsed_songs)
+        print(f'after update_json_with_songs_fuzzy')
 
         output_path = f'unit{unit_number}.json'
+        print(f'set output_path to : {output_path}')
 
-        save_path = os.path.join(os.path.dirname(__file__), f'../public/classes/{className}', output_path)
+        print(f"New Class Name: {className}")
+        class_directory_path = os.path.join(os.path.dirname(__file__), f'../public/classes/{className}')
+        print(f"class_directory_path: {class_directory_path}")
+
+
+        if not os.path.exists(class_directory_path):
+            print("Path does not exist")
+            os.makedirs(class_directory_path)
+
+        save_path = os.path.join(class_directory_path, output_path)
+
 
         directory = os.path.dirname(save_path)
         os.makedirs(directory, exist_ok=True)
@@ -200,22 +221,49 @@ def save_json_to_public_folder(json_data, save_path):
         print(f"Failed to save JSON to {save_path}: {e}")
         raise e
 
-def parse_songs_from_unit(unit_songs):
+# THIS IS FOR THE SONG YEAR FORMAT
+# def parse_songs_from_unit(unit_songs):
+#
+#     songs_data = {}
+#     current_genre = None
+#
+#     for line in unit_songs:
+#
+#         if line.startswith("Genre:"):
+#             current_genre = line.replace("Genre:", "").strip()
+#         else:
+#             #regex to match the 1. Artist Name    Song name (Year)
+#             match = re.match(r'^(\d+)\.\s*(.*?)\s{2,}(.*)\s\(\d{4}\)', line)
+#             if match:
+#                 song_number, artist, song_name = match.groups()
+#                 songs_data[song_name.strip()] = {
+#                     'song_number': song_number,
+#                     'artist': artist.strip(),
+#                     'genre': current_genre
+#                 }
+#
+#     return songs_data
 
+
+# Detect lines with multiple tabs (indicating artist and song separation)
+tab_pattern = re.compile(r'\t{2,}')  # Look for at least two consecutive tabs
+
+def parse_songs_from_unit(unit_songs):
     songs_data = {}
     current_genre = None
 
     for line in unit_songs:
-
+        # Detect and update the current genre
         if line.startswith("Genre:"):
             current_genre = line.replace("Genre:", "").strip()
+
         else:
-            #regex to match the 1. Artist Name    Song name (Year)
-            match = re.match(r'^(\d+)\.\s*(.*?)\s{2,}(.*)\s\(\d{4}\)', line)
-            if match:
-                song_number, artist, song_name = match.groups()
+            # Match lines with multiple tabs (artist and song separated by tabs)
+            match = tab_pattern.split(line)
+            if len(match) == 2:  # Expecting two parts: artist and song
+                song_number, artist, song_name = match[0].split('.')[0], match[0].split('.')[1], match[1]
                 songs_data[song_name.strip()] = {
-                    'song_number': song_number,
+                    'song_number': song_number.strip(),
                     'artist': artist.strip(),
                     'genre': current_genre
                 }
@@ -225,6 +273,7 @@ def parse_songs_from_unit(unit_songs):
 
 
 def update_json_with_songs_fuzzy(json_data, songs_data):
+    print(f'json data passed into fuzzy function: {songs_data}')
     for song in json_data:
         song_name = song.get("name")
 
@@ -238,6 +287,7 @@ def update_json_with_songs_fuzzy(json_data, songs_data):
         else:
             print(f"No good match found for: {song_name} (Best match: {best_match}, Score: {score})")
 
+    print(f'returning update_json_with_songs_fuzzy')
     return json_data
 
 

@@ -20,7 +20,7 @@ const MusicFrame = ({
     setTitleShowing(false);
     setArtistShowing(false);
     setGenreShowing(false);
-  }, []);
+  }, [title, artist]);
 
   useEffect(() => {
     switch (studyType) {
@@ -58,7 +58,7 @@ const MusicFrame = ({
         );
         break;
     }
-  }, []);
+  }, [index]);
 
   const toggleTitleShowing = () => {
     if (titleShowing) {

@@ -2,5 +2,9 @@
     {
         "class_name": "Z201",
         "number_of_units": 3
+    },
+    {
+        "class_name": "Z200",
+        "number_of_units": 4
     }
 ]
