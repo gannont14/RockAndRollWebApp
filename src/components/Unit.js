@@ -1,7 +1,12 @@
 import { React, useEffect, useState } from "react";
 import MusicFrame from "./MusicFrame";
 
-const Unit = ({ unitNumber, studyType, queueType = "smart" }) => {
+const Unit = ({
+  unitNumber,
+  studyType,
+  queueType = "smart",
+  classSelected,
+}) => {
   const [data, setData] = useState([]);
   const [queue, setQueue] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -12,7 +17,7 @@ const Unit = ({ unitNumber, studyType, queueType = "smart" }) => {
 
   const baseURL = process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}` : "";
 
-  const filePath = `${baseURL}/unit${unitNumber}.json`;
+  const filePath = `${baseURL}/classes/${classSelected}/unit${unitNumber}.json`;
 
   const shuffleArray = (arr) => {
     let shuffled = [...arr];
@@ -113,7 +118,7 @@ const Unit = ({ unitNumber, studyType, queueType = "smart" }) => {
             />
             <button
               onClick={() => setRandomIndex(data)}
-              className=" p-5 rounded-xl border border-black"
+              className=" p-5 rounded-xl border border-black w-full"
             >
               Next Song
             </button>

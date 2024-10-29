@@ -1,18 +1,17 @@
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
-import MusicFrame from "./components/MusicFrame";
-import StudyUnitSelector from "./components/StudyUnitSelector";
-import TestComponent from "./components/TestComponent";
-import TypeSelector from "./components/TypeSelector";
-import Unit from "./components/Unit";
+import ClassSelector from "./components/ClassSelector";
+import AdminUpload from "./components/AdminUpload.js";
 function App() {
   return (
-    <div className="App light">
-      {/* <Unit unitNumber={"1"} /> */}
-      <TypeSelector />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<ClassSelector />} />
+        <Route path="/admin/upload" element={<AdminUpload />} />
+      </Routes>
+    </Router>
   );
 }
 
 export default App;
-
-// https://drive.google.com/file/d/1V2xSXpGSm5Vb4hBo8D3bHVPLfZuAv4VT/view?usp=drive_link
