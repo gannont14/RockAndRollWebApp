@@ -1,3 +1,5 @@
+from docToTxt import extract_songs_by_units
+from files import generateJson
 import time
 import sys
 from flask import Flask, request, redirect, url_for, jsonify
@@ -10,9 +12,6 @@ from urllib.parse import urlparse
 from flask_cors import CORS
 
 sys.path.append('../../')
-from files import generateJson
-from docToTxt import extract_songs_by_units
-
 
 
 app = Flask(__name__)
@@ -20,20 +19,22 @@ CORS(app)
 
 
 if __name__ == '__main__':
-    app.run(port=8080)
+    app.run(port=8080, debug=True)
+
 
 @app.route('/time')
 def get_current_time():
     return {'time': time.time()}
+
 
 @app.route('/files/<folder_id>')
 def get_files(folder_id):
     # folder_id = '10cDnyq58TROnXFVmW5Xt-f2Cj-tjT4Qe'
 
     try:
-        driveFolderResponse =  generateJson(folder_id)
+        driveFolderResponse = generateJson(folder_id)
     except:
-        return {'result' : 'failure'}
+        return {'result': 'failure'}
 
     return driveFolderResponse
 
@@ -42,11 +43,14 @@ def get_files(folder_id):
 todo: update to take in form object to fill data isntead of disgusting endpoint
         update classes.json when adding to the file
 """
-@app.route('/upload/class', methods = ['POST'])
+
+
+@app.route('/upload/class', methods=['POST'])
 def upload_class():
+    print("Endpoint hit")
     try:
         print("attempting to upload class")
-        # get the name of the class 
+        # get the name of the class
         class_name = request.form.get('className')
         if not class_name:
             return jsonify({'error': 'Class name is required'}), 500
@@ -68,21 +72,17 @@ def upload_class():
 
         print(f"links: {links}")
 
-
-
         file = request.files.get('file')
         if not file or file.filename == '':
             return jsonify({'error': 'file upload failed'}), 500
 
         print(f"uploading class with \nclass_name:{class_name}\nnumber_of_units: {number_of_units}\nlinks: {links}")
 
-        
+        # pass the classname, number of units, links, and file into function call
 
-        #pass the classname, number of units, links, and file into function call
-
-        # check first if the links are the actual IDs or the share link 
+        # check first if the links are the actual IDs or the share link
         parsed_folder_ids = []
-        
+
         for link in links:
             parsed_link = urlparse(link)
             print(f"Original link: {link}")
@@ -101,14 +101,10 @@ def upload_class():
         # at the end, add it to the classes.json file, append to the class.json file in public folder
         update_classes_json(class_name, number_of_units)
 
-
         return jsonify({'success': 'successfullly uploaded class'}), 200
-        
-                
 
     except Exception as e:
         return jsonify({'error': f'error uploading class, error: {e}'}), 500
-
 
 
 def update_classes_json(class_name, number_of_units):
@@ -123,22 +119,21 @@ def update_classes_json(class_name, number_of_units):
         else:
             classes = []
 
-
         class_found = False
         for cls in classes:
             if cls['class_name'] == class_name:
                 cls['number_of_units'] = number_of_units
-                class_found = True 
+                class_found = True
                 break
 
-        #class doesn't exist, update it 
+        # class doesn't exist, update it
         if not class_found:
             classes.append({
                 'class_name': class_name,
                 'number_of_units': number_of_units
             })
 
-        # updated classes, write back to the file 
+        # updated classes, write back to the file
         with open(class_json_path, 'w') as file:
             json.dump(classes, file, indent=4)
         print(f"updated classes.json with {class_name}")
@@ -147,17 +142,14 @@ def update_classes_json(class_name, number_of_units):
         print(f"error updating classes.json, e: {e}")
         raise
 
-        
-
 
 def upload_file(folder_id, unit_number, file, className):
     print(f"Calling upload_file with: folder_id: {folder_id}, unit_number: {unit_number}, className: {className}")
     try:
-        driveFolderResponse =  generateJson(folder_id)
+        driveFolderResponse = generateJson(folder_id)
     except Exception as e:
-        return {'result' : f'failure to generate JSON: {str(e)}'}, 500
-    # Now the initial json has been uploaded, as wlel as the docx file that can be used to generate the json 
-
+        return {'result': f'failure to generate JSON: {str(e)}'}, 500
+    # Now the initial json has been uploaded, as wlel as the docx file that can be used to generate the json
 
     # Extract the songs metadata, and then check to match with fuzzy matching
     try:
@@ -168,7 +160,7 @@ def upload_file(folder_id, unit_number, file, className):
 
         extracted_songs = extract_songs_by_units(doc)
         print(f'songs extraced successfully')
-        
+
         unit_header = f"UNIT {unit_number}"
         if unit_header not in extracted_songs:
             return jsonify({'error': f'Unit {unit_number} not found in the document provided'})
@@ -191,27 +183,23 @@ def upload_file(folder_id, unit_number, file, className):
         class_directory_path = os.path.join(os.path.dirname(__file__), f'../public/classes/{className}')
         print(f"class_directory_path: {class_directory_path}")
 
-
         if not os.path.exists(class_directory_path):
             print("Path does not exist")
             os.makedirs(class_directory_path)
 
         save_path = os.path.join(class_directory_path, output_path)
 
-
         directory = os.path.dirname(save_path)
         os.makedirs(directory, exist_ok=True)
 
         save_json_to_public_folder(updated_json, save_path)
-
-
 
     except Exception as e:
         return jsonify({'error': f'Failed to extract songs: {str(e)}'}), 500
 
     return jsonify(updated_json), 500
 
-    
+
 def save_json_to_public_folder(json_data, save_path):
     try:
         with open(save_path, 'w') as json_file:
@@ -248,6 +236,7 @@ def save_json_to_public_folder(json_data, save_path):
 # Detect lines with multiple tabs (indicating artist and song separation)
 tab_pattern = re.compile(r'\t{2,}')  # Look for at least two consecutive tabs
 
+
 def parse_songs_from_unit(unit_songs):
     songs_data = {}
     current_genre = None
@@ -271,7 +260,6 @@ def parse_songs_from_unit(unit_songs):
     return songs_data
 
 
-
 def update_json_with_songs_fuzzy(json_data, songs_data):
     print(f'json data passed into fuzzy function: {songs_data}')
     for song in json_data:
@@ -289,22 +277,6 @@ def update_json_with_songs_fuzzy(json_data, songs_data):
 
     print(f'returning update_json_with_songs_fuzzy')
     return json_data
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # def extract_songs_by_units(docx_file):

@@ -6,5 +6,9 @@
     {
         "class_name": "Z200",
         "number_of_units": 4
+    },
+    {
+        "class_name": "Z203",
+        "number_of_units": 3
     }
 ]

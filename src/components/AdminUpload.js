@@ -11,7 +11,7 @@ const AdminUpload = () => {
   // State to store the class name
   const [className, setClassName] = useState("");
 
-  const baseURL = "http://127.0.0.1:5000";
+  const baseURL = "http://127.0.0.1:8080";
 
   // Handle change in number of units input
   const handleUnitCountChange = (e) => {
