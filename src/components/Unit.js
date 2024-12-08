@@ -5,6 +5,7 @@ const Unit = ({
   unitNumber,
   studyType,
   queueType = "smart",
+  //queueType = "none",
   classSelected,
 }) => {
   const [data, setData] = useState([]);
