@@ -22,6 +22,27 @@ const MusicFrame = ({
     setGenreShowing(false);
   }, [title, artist]);
 
+  const handleCorrectAnswer = (answerType) => {
+    switch (answerType) {
+      case "title":
+        setTitleShowing(true);
+        break;
+      case "artist":
+        setTitleShowing(true);
+        setArtistShowing(true);
+        setGenreShowing(true);
+        break;
+      case "genre":
+        setGenreShowing(true);
+        break;
+      case "all":
+        setTitleShowing(true);
+        setArtistShowing(true);
+        setGenreShowing(true);
+        break;
+    }
+  };
+
   useEffect(() => {
     switch (studyType) {
       case "study":
@@ -29,19 +50,19 @@ const MusicFrame = ({
           <div>
             <button
               className="m-3 p-3 border border-black rounded-lg"
-              onClick={toggleTitleShowing}
+              onClick={() => setTitleShowing(!titleShowing)}
             >
               Show Title
             </button>
             <button
               className="m-3 p-3 border border-black rounded-lg"
-              onClick={toggleArtistShowing}
+              onClick={() => setArtistShowing(!artistShowing)}
             >
               Show Artist
             </button>
             <button
               className="m-3 p-3 border border-black rounded-lg"
-              onClick={toggleGenreShowing}
+              onClick={() => setGenreShowing(!genreShowing)}
             >
               Show Genre
             </button>
@@ -54,35 +75,13 @@ const MusicFrame = ({
             index={index}
             unitNumber={unitNumber}
             classSelected={classSelected}
+            onCorrectAnswer={handleCorrectAnswer}
+            correctAnswer={artist}
           />,
         );
         break;
     }
-  }, [index]);
-
-  const toggleTitleShowing = () => {
-    if (titleShowing) {
-      setTitleShowing(false);
-    } else {
-      setTitleShowing(true);
-    }
-  };
-
-  const toggleArtistShowing = () => {
-    if (artistShowing) {
-      setArtistShowing(false);
-    } else {
-      setArtistShowing(true);
-    }
-  };
-
-  const toggleGenreShowing = () => {
-    if (artistShowing) {
-      setGenreShowing(false);
-    } else {
-      setGenreShowing(true);
-    }
-  };
+  }, [index, title, artist, genre, studyType]);
 
   return (
     <div className="m-5 p-5 mx-auto">
@@ -97,12 +96,12 @@ const MusicFrame = ({
       </h3>
       <div className="flex justify-center">
         <iframe
-          frameborder="0"
+          frameBorder="0"
           width="420"
           height="120"
           src={`https://drive.google.com/file/d/${ID}/preview?usp=embed&toolbar=0`}
           className="pt-5 bg-white"
-        ></iframe>
+        />
       </div>
       {frameContent}
     </div>

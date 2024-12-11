@@ -66,18 +66,25 @@ const StudyUnitSelector = ({ studyType, classSelected }) => {
               Unit {index + 1}
             </button>
           ))}
+          <button
+            className="mx-[25%] my-5 p-5 rounded-xl border border-black"
+            onClick={() => setUnitSelected(`-1`)}
+          >
+            Comprehensive
+          </button>
         </div>
       )}
       {unitSelected !== null && (
         <div>
           <h1 className="font-bold text-5xl pt-[15%] text-center">
             {" "}
-            {classSelected} Unit: {unitSelected}
+            {classSelected}
           </h1>
           <Unit
             unitNumber={unitSelected}
             classSelected={classSelected}
             studyType={studyType}
+            numUnits={numberOfUnits}
           />
         </div>
       )}

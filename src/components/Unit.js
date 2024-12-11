@@ -5,79 +5,102 @@ const Unit = ({
   unitNumber,
   studyType,
   queueType = "smart",
-  //queueType = "none",
+  numUnits = 0,
   classSelected,
 }) => {
+  const [currentUnit, setCurrentUnit] = useState(unitNumber);
   const [data, setData] = useState([]);
   const [queue, setQueue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showSongList, setShowSongList] = useState(false);
-
   const [currentIndex, setCurrentIndex] = useState(null);
 
   const baseURL = process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}` : "";
 
-  const filePath = `${baseURL}/classes/${classSelected}/unit${unitNumber}.json`;
+  const getRandomUnit = () => {
+    if (unitNumber === "-1" && numUnits > 0) {
+      return Math.floor(Math.random() * numUnits) + 1;
+    }
+    return unitNumber;
+  };
+
+  const fetchUnitData = async (unit, skipRandomIndex = false) => {
+    setLoading(true);
+    const targetUnit = unit.toString();
+    const filePath = `${baseURL}/classes/${classSelected}/unit${targetUnit}.json`;
+    console.log(`Fetching data for unit: ${targetUnit} from ${filePath}`);
+
+    try {
+      const response = await fetch(filePath);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const unitData = await response.json();
+      setData(unitData);
+      setLoading(false);
+      if (!skipRandomIndex) {
+        setInitialIndex(unitData);
+      }
+    } catch (error) {
+      console.error("There was a problem with the fetch operation:", error);
+      setError(error);
+      setLoading(false);
+    }
+  };
+
+  const setInitialIndex = (unitData) => {
+    if (queueType === "smart") {
+      const newQueue = shuffleArray([...Array(unitData.length).keys()]);
+      const nextIndex = newQueue.pop();
+      setQueue(newQueue);
+      setCurrentIndex(nextIndex);
+    } else {
+      setCurrentIndex(Math.floor(Math.random() * unitData.length));
+    }
+  };
 
   const shuffleArray = (arr) => {
     let shuffled = [...arr];
-
-    //loop through the elements, swapping each of them with a random index
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      //swap elements
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     return shuffled;
   };
 
-  //useEffect for whenever data changes, to shuffle the array
   useEffect(() => {
-    setQueue(shuffleArray([...Array(data.length).keys()]));
-  }, [data]);
+    if (classSelected && unitNumber) {
+      const initialUnit = getRandomUnit();
+      console.log("Initial unit:", initialUnit);
+      setCurrentUnit(initialUnit);
+      fetchUnitData(initialUnit);
+    }
+  }, [classSelected, unitNumber, numUnits]);
 
-  useEffect(() => {
-    // Fetch the JSON file from the public directory
-    fetch(filePath)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setData(data);
-        setLoading(false);
-        setRandomIndex(data);
-      })
-      .catch((error) => {
-        console.error("There was a problem with the fetch operation:", error);
-        setError(error);
-        setLoading(false);
-      });
-  }, []);
-
-  const setRandomIndex = (data) => {
-    if (queueType === "smart") {
+  const setRandomIndex = async () => {
+    console.log("Setting random index, unitNumber:", unitNumber);
+    if (unitNumber === "-1") {
+      const newUnit = getRandomUnit();
+      console.log("Randomizing unit to:", newUnit);
+      setCurrentUnit(newUnit);
+      await fetchUnitData(newUnit, true);
+      setInitialIndex(data);
+    } else if (queueType === "smart") {
       setQueue((prevQueue) => {
         let newQueue = [...prevQueue];
-
-        if (newQueue.length === 0) {
-          // If queue is empty, reshuffle and refill the queue with indices
+        if (!newQueue?.length) {
           newQueue = shuffleArray([...Array(data.length).keys()]);
         }
-
-        const nextIndex = newQueue.pop(); // Get the last element in the queue (random index)
-        setCurrentIndex(nextIndex); // Update the current index based on the next available one
-
-        return newQueue; // Return the updated queue of indices
+        const nextIndex = newQueue.pop();
+        setCurrentIndex(nextIndex);
+        return newQueue;
       });
     } else {
-      // If not using "smart" queue, just pick a random index
       setCurrentIndex(Math.floor(Math.random() * data.length));
     }
   };
+
   const handleSongSelect = (index) => {
     setCurrentIndex(index);
     setShowSongList(false);
@@ -85,6 +108,7 @@ const Unit = ({
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading data: {error.message}</p>;
+  if (!data.length) return <p>No songs found for this unit</p>;
 
   return (
     <div className="flex flex-col align-middle w-full h-[100vh] mt-10">
@@ -110,24 +134,26 @@ const Unit = ({
             <h1 className="text-3xl font-bold">Now Playing:</h1>
             <MusicFrame
               index={currentIndex}
-              ID={data[currentIndex].id}
-              title={data[currentIndex].name}
-              artist={data[currentIndex].author}
-              genre={data[currentIndex].genre}
+              ID={data[currentIndex]?.id}
+              title={data[currentIndex]?.name}
+              artist={data[currentIndex]?.author}
+              genre={data[currentIndex]?.genre}
               studyType={studyType}
-              unitNumber={unitNumber}
+              unitNumber={currentUnit}
               classSelected={classSelected}
             />
             <button
-              onClick={() => setRandomIndex(data)}
-              className=" p-5 rounded-xl border border-black w-full"
+              onClick={() => setRandomIndex()}
+              className="p-5 rounded-xl border border-black w-full"
             >
               Next Song
             </button>
           </>
         ) : (
           <div className="h-[50vh] overflow-y-scroll">
-            <h1 className="text-3xl font-bold">Song List</h1>
+            <h1 className="text-3xl font-bold">
+              Song List {unitNumber === "-1" && `(Unit ${currentUnit})`}
+            </h1>
             <ul className="mt-3">
               {data.map((song, index) => (
                 <li

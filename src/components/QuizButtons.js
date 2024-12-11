@@ -1,39 +1,35 @@
 import { React, useEffect, useState } from "react";
 
-const QuizButtons = ({ index, unitNumber, classSelected }) => {
-  const [artists, setArtists] = useState([]);
+const QuizButtons = ({
+  index,
+  unitNumber,
+  classSelected,
+  onCorrectAnswer,
+  correctAnswer,
+}) => {
   const [options, setOptions] = useState([]);
-  const [correctArtist, setCorrectArtist] = useState("");
-  const [selectedArtist, setSelectedArtist] = useState(null); // Track the selected artist
+  const [selectedArtist, setSelectedArtist] = useState(null);
 
   const baseURL = process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}` : "";
   const filePath = `${baseURL}/classes/${classSelected}/unit${unitNumber}.json`;
 
   useEffect(() => {
     setSelectedArtist(null);
-    // Fetch the JSON file for the current unit
     const fetchUnitData = async () => {
       try {
         const response = await fetch(filePath);
-        const data = await response.json(); // Assume data is an array of song objects
-
-        const song = data[index]; // Get the current song based on the index
-        setCorrectArtist(song.author); // Set the correct artist
+        const data = await response.json();
 
         const allArtists = data
           .map((song) => song.author)
-          .filter((artist) => artist !== song.author); // Exclude the correct artist
+          .filter((artist) => artist !== correctAnswer);
 
-        // Use a Set to avoid duplicate incorrect artists
         const uniqueIncorrectArtists = Array.from(new Set(allArtists));
-
-        // Shuffle and select 3 incorrect artists
         const incorrectArtists = uniqueIncorrectArtists
           .sort(() => 0.5 - Math.random())
           .slice(0, 3);
 
-        // Combine correct and incorrect artists and shuffle them
-        const quizOptions = [...incorrectArtists, song.author].sort(
+        const quizOptions = [...incorrectArtists, correctAnswer].sort(
           () => 0.5 - Math.random(),
         );
         setOptions(quizOptions);
@@ -43,10 +39,13 @@ const QuizButtons = ({ index, unitNumber, classSelected }) => {
     };
 
     fetchUnitData();
-  }, [filePath, index]);
+  }, [filePath, index, correctAnswer]);
 
   const handleClick = (artist) => {
-    setSelectedArtist(artist); // Update the selected artist
+    setSelectedArtist(artist);
+    if (artist === correctAnswer) {
+      onCorrectAnswer("artist");
+    }
   };
 
   return (
@@ -57,17 +56,15 @@ const QuizButtons = ({ index, unitNumber, classSelected }) => {
           <button
             key={idx}
             onClick={() => handleClick(artist)}
-            className={`btn my-3 
-              ${
-                selectedArtist
-                  ? artist === correctArtist
-                    ? "bg-green-500 hover:bg-green-500" // Correct answer: green
-                    : selectedArtist === artist
-                      ? "bg-red-500 hover:bg-red-500" // Incorrect answer: red
-                      : ""
-                  : ""
-              }
-            `}
+            className={`btn my-3 ${
+              selectedArtist
+                ? artist === correctAnswer
+                  ? "bg-green-500 hover:bg-green-500"
+                  : selectedArtist === artist
+                    ? "bg-red-500 hover:bg-red-500"
+                    : ""
+                : ""
+            }`}
           >
             {artist}
           </button>
