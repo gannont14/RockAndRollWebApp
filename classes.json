@@ -1,14 +1,18 @@
 [
     {
         "class_name": "Z201",
-        "number_of_units": 4
+        "number_of_units": 4,
+        "has_comprehensive": true
     },
     {
         "class_name": "Z200",
-        "number_of_units": 4
+        "number_of_units": 4,
+        "has_comprehensive": true
     },
     {
         "class_name": "Z203",
-        "number_of_units": 4
+        "number_of_units": 4,
+        "has_comprehensive": true
+      
     }
 ]
