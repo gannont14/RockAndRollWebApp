@@ -158,9 +158,8 @@ const Unit = ({
               {data.map((song, index) => (
                 <li
                   key={song.id}
-                  className={`p-2 cursor-pointer hover:bg-gray-200 ${
-                    currentIndex === index ? "bg-gray-300" : ""
-                  }`}
+                  className={`p-2 cursor-pointer hover:bg-gray-200 ${currentIndex === index ? "bg-gray-300" : ""
+                    }`}
                   onClick={() => handleSongSelect(index)}
                 >
                   {song.name} - {song.author}
