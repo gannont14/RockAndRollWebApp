@@ -2,7 +2,7 @@
 
 import { React, useState, useEffect } from "react";
 import TypeSelector from "./TypeSelector";
-
+import GitHubLink from "./GitHubLink";
 function ClassSelector() {
   const [classSelected, setClassSelected] = useState(null);
 
@@ -32,6 +32,10 @@ function ClassSelector() {
                 {classObject.class_name}
               </button>
             ))}
+
+      <div className="absolute bottom-0 right-0 h-[40px] w-[40px] mb-5 mr-5"> 
+        <GitHubLink/>
+      </div>
           </div>
         )}
         {classSelected !== null && (
