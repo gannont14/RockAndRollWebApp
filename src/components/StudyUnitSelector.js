@@ -4,6 +4,7 @@ import Unit from "./Unit";
 
 const StudyUnitSelector = ({ studyType, classSelected }) => {
   const [numberOfUnits, setNumberOfUnits] = useState(0);
+  const [hasComprehensive, setHasComprehensive] = useState(false);
   const [unitSelected, setUnitSelected] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -31,6 +32,12 @@ const StudyUnitSelector = ({ studyType, classSelected }) => {
         } else {
           setError("Class not found");
         }
+
+        // update if it has a comprehensive section
+        if( selectedClass.has_comprehensive){
+          setHasComprehensive(true);
+        }
+
         setLoading(false);
       } catch (err) {
         console.error("Error fetching class data:", err);
@@ -66,12 +73,14 @@ const StudyUnitSelector = ({ studyType, classSelected }) => {
               Unit {index + 1}
             </button>
           ))}
+          {hasComprehensive && 
           <button
             className="mx-[25%] my-5 p-5 rounded-xl border border-black"
             onClick={() => setUnitSelected(`-1`)}
           >
             Comprehensive
           </button>
+          }
         </div>
       )}
       {unitSelected !== null && (

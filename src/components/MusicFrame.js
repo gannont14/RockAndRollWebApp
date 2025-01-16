@@ -84,7 +84,7 @@ const MusicFrame = ({
   }, [index, title, artist, genre, studyType]);
 
   return (
-    <div className="m-5 p-5 mx-auto">
+    <div className="m-5 p-5 mx-auto text-center">
       <h1 className={titleShowing ? `text-black` : `hidden`}>
         <span className="font-bold">Title:</span> {title}
       </h1>

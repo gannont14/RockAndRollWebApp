@@ -10,6 +10,11 @@
         "has_comprehensive": true
     },
     {
+        "class_name": "Z202",
+        "number_of_units": 1,
+        "has_comprehensive": false
+    },
+    {
         "class_name": "Z203",
         "number_of_units": 4,
         "has_comprehensive": true
