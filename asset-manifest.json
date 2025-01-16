@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/RockAndRollWebApp/static/css/main.a04686a3.css",
-    "main.js": "/RockAndRollWebApp/static/js/main.379c24bc.js",
+    "main.css": "/RockAndRollWebApp/static/css/main.d6779317.css",
+    "main.js": "/RockAndRollWebApp/static/js/main.31fb1650.js",
     "static/js/453.90c9a0c8.chunk.js": "/RockAndRollWebApp/static/js/453.90c9a0c8.chunk.js",
     "index.html": "/RockAndRollWebApp/index.html",
-    "main.a04686a3.css.map": "/RockAndRollWebApp/static/css/main.a04686a3.css.map",
-    "main.379c24bc.js.map": "/RockAndRollWebApp/static/js/main.379c24bc.js.map",
+    "main.d6779317.css.map": "/RockAndRollWebApp/static/css/main.d6779317.css.map",
+    "main.31fb1650.js.map": "/RockAndRollWebApp/static/js/main.31fb1650.js.map",
     "453.90c9a0c8.chunk.js.map": "/RockAndRollWebApp/static/js/453.90c9a0c8.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a04686a3.css",
-    "static/js/main.379c24bc.js"
+    "static/css/main.d6779317.css",
+    "static/js/main.31fb1650.js"
   ]
 }
